@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1463283515 source:/home/pranav/Documents/Simulation_Project/BankSImulation/Customer.cpp
+	"Customer.h"
+	<time.h>
+
+1463311769 /home/pranav/Documents/Simulation_Project/BankSImulation/Customer.h
+	"task.h"
+
+1463297346 source:/home/pranav/Documents/Simulation_Project/BankSImulation/main.cpp
+
+1463305993 source:/home/pranav/Documents/Simulation_Project/BankSImulation/task.cpp
+	"task.h"
+	<time.h>
+
+1463305882 /home/pranav/Documents/Simulation_Project/BankSImulation/task.h
+
+1463304969 source:/home/pranav/Documents/Simulation_Project/BankSImulation/teller.cpp
+	"teller.h"
+	"Customer.h"
+	<time.h>
+
+1463300008 /home/pranav/Documents/Simulation_Project/BankSImulation/teller.h
+	"Customer.h"
+
