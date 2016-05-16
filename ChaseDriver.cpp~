@@ -28,6 +28,7 @@ boost::timer timer1;
 
 int main()
 {
+    cout<< "lol" <<endl;
     omp_set_num_threads(NUM_THREADS);
 
     BankQueue<customer> bankLineQueue;
