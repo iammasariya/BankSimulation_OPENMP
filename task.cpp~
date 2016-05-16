@@ -9,6 +9,7 @@ task::task()
     withdraw = false;
     amount = 0.0f;
     processingTime = 0.0f;
+    currentTask = [];
 }
 
     bool task::isCheck(){
