@@ -41,7 +41,6 @@ int main()
     BankQueue<customer> bankLineQueue;
     vector<customer> vecCust;
     vector<teller> vecTeller;
-    customer custNow;
     teller telArray[NUM_THREADS];
     vector<teller>::iterator it;
 
@@ -54,62 +53,60 @@ int main()
 	std::ifstream  data("customer.csv");
 
 	std::string line;
-	    while(std::getline(data,line))
-	    {
+    while(std::getline(data,line))
+	{
 		std::stringstream  lineStream(line);
 		std::string        cell;
 		customer simCustomer;
-                waitTime.restart();
-                simCustomer.setArrivalTime(0.0f);
-		while(std::getline(lineStream,cell,','))
-		{
-		    int number = 0;
-		    std::istringstream iss(cell);
-		    if (!(iss >> number).fail()) {
-		    	simCustomer.setCustomerNumber(number);
-		    }
-		    else{
-			if(cell == "inquiry"){
+        waitTime.restart();
+        simCustomer.setArrivalTime(0.0f);
+    while(std::getline(lineStream,cell,','))
+    {
+        int number = 0;
+		std::istringstream iss(cell);
+		if (!(iss >> number).fail())
+        {
+		  	simCustomer.setCustomerNumber(number);
+        }
+        else
+        {
+			if(cell == "inquiry")
+			{
 				simCustomer.t.setInquiry(true);
 			}
-			else if(cell == "deposit"){
+			else if(cell == "deposit")
+			{
 				simCustomer.t.setDeposit(true);
 			}
-			else if(cell == "check"){
+			else if(cell == "check")
+			{
 				simCustomer.t.setCheck(true);
 			}
-			else{
+			else
+			{
 				simCustomer.t.setWithdraw(true);
 			}
-		    }
+        }
 
-		}
-                bankLineQueue.Enqueue(simCustomer);
-                std::cout<<"custNum: "<<simCustomer.getCustomerNumber()<<" "<< cell<<endl;
-	    }
+    }
+        bankLineQueue.Enqueue(simCustomer);
+        std::cout<<"custNum: "<<simCustomer.getCustomerNumber()<<" "<< cell<<endl;
+    }
 
-    nthreads = omp_get_max_threads();
     #pragma omp parallel
-    {
-        for(int i=0;i<omp_get_max_threads();i++)
+    {   customer custNow;
+        int id = omp_get_thread_num();
+        for(int i=id;i<sizeof(telArray);i++)
         {
-
-                int id = omp_get_thread_num();
-               // printf("Thread number: %d\n",id);
-               teller curTel = telArray[id];
-               #pragma omp critical
-               {
-                    while(bankLineQueue.ElemNum()>0)
-                    {
+                teller curTel = telArray[i];
+                while(bankLineQueue.ElemNum()>0 && curTel.isAvailable())
+                {
                         custNow = bankLineQueue.Dequeue();
                         double elapsed = waitTime.elapsed();
                         custNow.setWaitingTime(elapsed);
                         printf("teller %d served customer %d\n",curTel.getTellerID(),custNow.getCustomerNumber());
                         proccessCustomer(curTel.getTellerID());
-                    }
-
-               }
-
+                }
         }
     }
 }
