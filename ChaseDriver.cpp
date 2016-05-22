@@ -122,7 +122,7 @@ void serveCustomer(customer &cust, teller &tel)
     if(cust.t.isCheck())
     {
         usleep(5000);
-        timer = timer1.elapsed();
+        time = timer1.elapsed();
         cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for check processing \n",cust.getCustomerNumber(),tel.getTellerID());
 
@@ -130,7 +130,7 @@ void serveCustomer(customer &cust, teller &tel)
     if(cust.t.isInquiry())
     {
         usleep(1000);
-        timer = timer1.elapsed();
+        time = timer1.elapsed();
         cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for inquiry processing \n",cust.getCustomerNumber(),tel.getTellerID());
 
@@ -138,7 +138,7 @@ void serveCustomer(customer &cust, teller &tel)
     if(cust.t.isDeposit())
     {
         usleep(6000);
-        timer = timer1.elapsed();
+        time = timer1.elapsed();
         cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for deposit processing \n",cust.getCustomerNumber(),tel.getTellerID());
 
@@ -146,7 +146,7 @@ void serveCustomer(customer &cust, teller &tel)
     if(cust.t.isWithdraw())
     {
         usleep(3000);
-        timer = timer1.elapsed();
+        time = timer1.elapsed();
         cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for withdraw processing \n",cust.getCustomerNumber(),tel.getTellerID());
 
