@@ -29,6 +29,7 @@ boost::timer waitTime;
 boost::timer timer1;
 
 double proccessCustomer(int selection);
+void serveCustomer(customer &cust, teller &tel);
 
 int main()
 {
@@ -47,6 +48,7 @@ int main()
     for(int i=0;i<5;i++){
         teller tel;
         tel.setAvailable(true);
+        tel.setStatus(true);
         tel.setTellerID(i);
         telArray[i] = tel;
     }
@@ -96,7 +98,8 @@ int main()
     #pragma omp parallel
     {   customer custNow;
         int id = omp_get_thread_num();
-        for(int i=id;i<sizeof(telArray);i++)
+        #pragma omp for
+        for(int i=id;i< omp_get_max_threads();i++)
         {
                 teller curTel = telArray[i];
                 while(bankLineQueue.ElemNum()>0 && curTel.isAvailable())
@@ -104,11 +107,38 @@ int main()
                         custNow = bankLineQueue.Dequeue();
                         double elapsed = waitTime.elapsed();
                         custNow.setWaitingTime(elapsed);
-                        printf("teller %d served customer %d\n",curTel.getTellerID(),custNow.getCustomerNumber());
-                        proccessCustomer(curTel.getTellerID());
+                        //printf("teller %d served customer %d\n",curTel.getTellerID(),custNow.getCustomerNumber());
+                        //proccessCustomer(curTel.getTellerID());
+                        serveCustomer(custNow,curTel);
                 }
         }
     }
+}
+
+void serveCustomer(customer &cust, teller &tel)
+{
+    tel.setAvailable(false);
+    if(cust.t.isCheck())
+    {
+        printf("Customer %d has been served by teller %d for check processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        usleep(500000);
+    }
+    if(cust.t.isInquiry())
+    {
+        printf("Customer %d has been served by teller %d for inquiry processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        usleep(100000);
+    }
+    if(cust.t.isDeposit())
+    {
+        printf("Customer %d has been served by teller %d for deposit processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        usleep(600000);
+    }
+    if(cust.t.isWithdraw())
+    {
+        printf("Customer %d has been served by teller %d for withdraw processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        usleep(300000);
+    }
+    tel.setAvailable(true);
 }
 
 double proccessCustomer(int selection)

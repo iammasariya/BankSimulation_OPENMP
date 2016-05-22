@@ -13,11 +13,11 @@ public:
     void setTellerID(int id);
     int getTellerID();
 
-    bool isAvailable();
+    bool isAvailable(); // teller is free to serve customer
 
     void serveCustomer(customer c);
 
-    bool isOnline();
+    bool isOnline(); //teller is available at window
 
     void setStatus(bool status);
     void setAvailable(bool avail);
