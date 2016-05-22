@@ -41,9 +41,7 @@ int main()
 
     BankQueue<customer> bankLineQueue;
     vector<customer> vecCust;
-    vector<teller> vecTeller;
     teller telArray[NUM_THREADS];
-    vector<teller>::iterator it;
 
     for(int i=0;i<5;i++){
         teller tel;
@@ -110,6 +108,7 @@ int main()
                         //printf("teller %d served customer %d\n",curTel.getTellerID(),custNow.getCustomerNumber());
                         //proccessCustomer(curTel.getTellerID());
                         serveCustomer(custNow,curTel);
+                        vecCust.push_back(custNow);
                 }
         }
     }
@@ -117,26 +116,40 @@ int main()
 
 void serveCustomer(customer &cust, teller &tel)
 {
+    double time;
     tel.setAvailable(false);
+    timer1.restart();
     if(cust.t.isCheck())
     {
+        usleep(5000);
+        timer = timer1.elapsed();
+        cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for check processing \n",cust.getCustomerNumber(),tel.getTellerID());
-        usleep(500000);
+
     }
     if(cust.t.isInquiry())
     {
+        usleep(1000);
+        timer = timer1.elapsed();
+        cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for inquiry processing \n",cust.getCustomerNumber(),tel.getTellerID());
-        usleep(100000);
+
     }
     if(cust.t.isDeposit())
     {
+        usleep(6000);
+        timer = timer1.elapsed();
+        cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for deposit processing \n",cust.getCustomerNumber(),tel.getTellerID());
-        usleep(600000);
+
     }
     if(cust.t.isWithdraw())
     {
+        usleep(3000);
+        timer = timer1.elapsed();
+        cust.setTransactionTime(time);
         printf("Customer %d has been served by teller %d for withdraw processing \n",cust.getCustomerNumber(),tel.getTellerID());
-        usleep(300000);
+
     }
     tel.setAvailable(true);
 }
