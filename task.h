@@ -2,33 +2,52 @@
 Author : Team Nirvana - Pranav and Chirag
 */
 
-#ifndef TASK_H_INCLUDED
-#define TASK_H_INCLUDED
 class task{
 public:
-    task();
-    bool isCheck();
-    void setCheck(bool flag);
+    task(){};
+     bool isCheck(){
+        return check;
+    }
 
-    bool isInquiry();
-    void setInquiry(bool flag);
+    void setCheck(bool flag){
+        check = flag;
+    }
 
-    bool isDeposit();
-    void setDeposit(bool flag);
+    bool isInquiry(){
+        return inquiry;
+    }
 
-    bool isWithdraw();
-    void setWithdraw(bool flag);
+    void setInquiry(bool flag){
+        inquiry = flag;
+    }
 
-    void setAmount(double amt);
-    double getAmount();
+    bool isDeposit(){
+        return deposit;
+    }
+
+    void setDeposit(bool flag){
+        deposit = flag;
+    }
+
+    bool isWithdraw(){
+        return withdraw;
+    }
+    void setWithdraw(bool flag){
+        withdraw = flag;
+    }
+
+    void setAmount(double amt){
+        amount = amt;
+    }
+
+    double getAmount(){
+        return amount;
+    }
 
 private:
-    bool check;
-    bool inquiry;
-    bool deposit;
-    bool withdraw;
-    double amount;
+    bool check = false;
+    bool inquiry = false;
+    bool deposit = false;
+    bool withdraw = false;
+    double amount = 0.0f;
 };
-
-
-#endif // TASK_H_INCLUDED

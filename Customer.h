@@ -2,33 +2,57 @@
 Author : Team Nirvana - Pranav and Chirag
 */
 
-#ifndef CUSTOMER_H
-#define CUSTOMER_H
 #include "task.h"
 
 class customer{
 public:
-    customer();
+    customer(){};
     task t;
 
-    void setCustomerNumber(int customerID);
-    int getCustomerNumber();
+void setCustomerNumber(int customerID)
+{
+    customerNumber = customerID;
+}
 
-    void setArrivalTime(double arrTime);
-    double getArrivalTime();
+int getCustomerNumber()
+{
+    return customerNumber;
+}
 
-    void setTransactionTime(double time);
-    double getTransactionTime();
+void setArrivalTime(double time)
+{
+    arrivalTime = time;
+}
 
-    void setWaitingTime(double time);
-    double getWaitingTime();
+double getArrivalTime()
+{
+    return arrivalTime;
+}
+
+void setWaitingTime(double time)
+{
+    waitTime = time;
+}
+
+double getWaitingTime()
+{
+    return waitTime;
+}
+
+void setTransactionTime(double time)
+{
+    transactionTime = time;
+}
+
+double getTransactionTime()
+{
+    return transactionTime;
+}
+
 
 private:
-    double arrivalTime;
-    double waitTime;
-    double transactionTime;
-    int customerNumber;
+    double arrivalTime = 0.0f;
+    double waitTime = 0.0f;
+    double transactionTime = 0.0f;
+    int customerNumber = 0;
 };
-
-
-#endif // CUSTOMER_H

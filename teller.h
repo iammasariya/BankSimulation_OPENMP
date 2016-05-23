@@ -2,35 +2,49 @@
 Author : Team Nirvana - Pranav and Chirag
 */
 
-#include "Customer.h"
-#ifndef TELLER_H_INCLUDED
-#define TELLER_H_INCLUDED
-
 class teller{
 public:
-    teller();
+    teller(){};
 
-    void setTellerID(int id);
-    int getTellerID();
+     void setTellerID(int id){
+        tellerID = id;
+    }
+    int getTellerID()
+    {
+        return tellerID;
+    }
 
-    bool isAvailable(); // teller is free to serve customer
+    bool isAvailable(){
+        return available;
+    }
 
-    void serveCustomer(customer c);
+    bool isOnline(){
+        return status;
+    }
 
-    bool isOnline(); //teller is available at window
+    void setStatus(bool status)
+    {
+        this->status = status;
+    }
 
-    void setStatus(bool status);
-    void setAvailable(bool avail);
+    void setAvailable(bool avail){
+        available = avail;
+    }
 
-    void custServed();
-    int getCustomerServed();
+    void custServed()
+    {
+        this->customerServed++;
+    }
+
+    int getCustomerServed()
+    {
+        return customerServed;
+    }
+
 
 private:
-    bool available;
-    bool status;
-    int tellerID;
-    int customerServed;
-    customer c;
+    bool available = false;
+    bool status = false;
+    int tellerID = 0;
+    int customerServed = 0;
 };
-
-#endif // TELLER_H_INCLUDED
