@@ -14,13 +14,12 @@ Author : Team Nirvana - Pranav and Chirag
 #include <boost/format.hpp>
 #include <boost/timer.hpp>
 #include <boost/foreach.hpp>
-#include "task.h"
-#include "Customer.h"
 #include "teller.h"
+#include "Customer.h"
 #include "CustomerQueue.h"
 #include <thread>
 
-#define NUM_THREADS 3
+#define NUM_THREADS 5
 
 using namespace std;
 
@@ -32,9 +31,92 @@ int ledgerWit = 0;
 int totalLedger = 10000;
 
 void serveCustomer(customer* cust, teller* tel);
+void run();
 
 int main()
 {
+omp_set_num_threads(NUM_THREADS);
+
+    BankQueue<customer> bankLineQueue;
+    vector<customer> vecCust;
+    teller telArray[NUM_THREADS];
+
+    for(int i=0;i<omp_get_max_threads();i++){
+        teller tel;
+        tel.setAvailable(true);
+        tel.setStatus(true);
+        tel.setTellerID(i);
+        telArray[i] = tel;
+    }
+
+    /* Reading from the CSV file*/
+    std::ifstream  data("customer.csv");
+    int custNum = 1;
+    std::string line;
+    while(std::getline(data,line))
+    {
+        std::stringstream  lineStream(line);
+        std::string        cell;
+        customer simCustomer;
+        waitTime.restart();
+        simCustomer.setCustomerNumber(custNum);
+        custNum++;
+        simCustomer.setArrivalTime(0.0f);
+    while(std::getline(lineStream,cell,','))
+    {
+        int number = 0;
+        std::istringstream iss(cell);
+        if (!(iss >> number).fail())
+        {
+            simCustomer.t.setAmount(number);
+        }
+        else
+        {
+            if(cell == "inquiry")
+            {
+                simCustomer.t.setInquiry(true);
+            }
+            else if(cell == "deposit")
+            {
+                simCustomer.t.setDeposit(true);
+            }
+            else if(cell == "check")
+            {
+                simCustomer.t.setCheck(true);
+            }
+            else
+            {
+                simCustomer.t.setWithdraw(true);
+            }
+        }
+
+    }
+        bankLineQueue.Enqueue(simCustomer);
+        std::cout<<"custNum: "<<simCustomer.getCustomerNumber()<<" "<<simCustomer.t.getAmount()<<" "<< cell<<endl;
+    }
+
+    /*Parallel block*/
+    #pragma omp parallel
+    {   customer custNow;
+        int id = omp_get_thread_num();
+        #pragma omp for
+        for(int i=id;i<omp_get_max_threads();i++)
+        {
+                teller curTel = telArray[id];
+                while(bankLineQueue.ElemNum()>0 && curTel.isAvailable())
+                {
+                        custNow = bankLineQueue.Dequeue();
+                        double elapsed = waitTime.elapsed();
+                        custNow.setWaitingTime(elapsed);
+                        serveCustomer(&custNow,&curTel);
+                        vecCust.push_back(custNow);
+                }
+        }
+    }
+    std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;    
+}
+
+void run(){
     omp_set_num_threads(NUM_THREADS);
 
     BankQueue<customer> bankLineQueue;
@@ -50,14 +132,14 @@ int main()
     }
 
     /* Reading from the CSV file*/
-	std::ifstream  data("customer.csv");
+    std::ifstream  data("customer.csv");
     int custNum = 1;
-	std::string line;
+    std::string line;
     while(std::getline(data,line))
-	{
-		std::stringstream  lineStream(line);
-		std::string        cell;
-		customer simCustomer;
+    {
+        std::stringstream  lineStream(line);
+        std::string        cell;
+        customer simCustomer;
         waitTime.restart();
         simCustomer.setCustomerNumber(custNum);
         custNum++;
@@ -65,29 +147,29 @@ int main()
     while(std::getline(lineStream,cell,','))
     {
         int number = 0;
-		std::istringstream iss(cell);
-		if (!(iss >> number).fail())
+        std::istringstream iss(cell);
+        if (!(iss >> number).fail())
         {
-		  	simCustomer.t.setAmount(number);
+            simCustomer.t.setAmount(number);
         }
         else
         {
-			if(cell == "inquiry")
-			{
-				simCustomer.t.setInquiry(true);
-			}
-			else if(cell == "deposit")
-			{
-				simCustomer.t.setDeposit(true);
-			}
-			else if(cell == "check")
-			{
-				simCustomer.t.setCheck(true);
-			}
-			else
-			{
-				simCustomer.t.setWithdraw(true);
-			}
+            if(cell == "inquiry")
+            {
+                simCustomer.t.setInquiry(true);
+            }
+            else if(cell == "deposit")
+            {
+                simCustomer.t.setDeposit(true);
+            }
+            else if(cell == "check")
+            {
+                simCustomer.t.setCheck(true);
+            }
+            else
+            {
+                simCustomer.t.setWithdraw(true);
+            }
         }
 
     }
@@ -100,9 +182,9 @@ int main()
     {   customer custNow;
         int id = omp_get_thread_num();
         #pragma omp for
-        for(int i=id;i< omp_get_max_threads();i++)
+        for(int i=id;i<omp_get_max_threads();i++)
         {
-                teller curTel = telArray[i];
+                teller curTel = telArray[id];
                 while(bankLineQueue.ElemNum()>0 && curTel.isAvailable())
                 {
                         custNow = bankLineQueue.Dequeue();
@@ -113,7 +195,7 @@ int main()
                 }
         }
     }
-    std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;
+    std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;   
 }
 
 void serveCustomer(customer* cust, teller* tel)

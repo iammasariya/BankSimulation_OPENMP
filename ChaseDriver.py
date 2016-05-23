@@ -70,85 +70,14 @@ except AttributeError:
 
 
 NUM_THREADS = _ChaseDriver.NUM_THREADS
-class customer(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, customer, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, customer, name)
-    __repr__ = _swig_repr
-    def __init__(self): 
-        this = _ChaseDriver.new_customer()
-        try: self.this.append(this)
-        except: self.this = this
-    __swig_setmethods__["t"] = _ChaseDriver.customer_t_set
-    __swig_getmethods__["t"] = _ChaseDriver.customer_t_get
-    if _newclass:t = _swig_property(_ChaseDriver.customer_t_get, _ChaseDriver.customer_t_set)
-    def setCustomerNumber(self, *args): return _ChaseDriver.customer_setCustomerNumber(self, *args)
-    def getCustomerNumber(self): return _ChaseDriver.customer_getCustomerNumber(self)
-    def setArrivalTime(self, *args): return _ChaseDriver.customer_setArrivalTime(self, *args)
-    def getArrivalTime(self): return _ChaseDriver.customer_getArrivalTime(self)
-    def setTransactionTime(self, *args): return _ChaseDriver.customer_setTransactionTime(self, *args)
-    def getTransactionTime(self): return _ChaseDriver.customer_getTransactionTime(self)
-    def setWaitingTime(self, *args): return _ChaseDriver.customer_setWaitingTime(self, *args)
-    def getWaitingTime(self): return _ChaseDriver.customer_getWaitingTime(self)
-    __swig_destroy__ = _ChaseDriver.delete_customer
-    __del__ = lambda self : None;
-customer_swigregister = _ChaseDriver.customer_swigregister
-customer_swigregister(customer)
-
-class task(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, task, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, task, name)
-    __repr__ = _swig_repr
-    def __init__(self): 
-        this = _ChaseDriver.new_task()
-        try: self.this.append(this)
-        except: self.this = this
-    def isCheck(self): return _ChaseDriver.task_isCheck(self)
-    def setCheck(self, *args): return _ChaseDriver.task_setCheck(self, *args)
-    def isInquiry(self): return _ChaseDriver.task_isInquiry(self)
-    def setInquiry(self, *args): return _ChaseDriver.task_setInquiry(self, *args)
-    def isDeposit(self): return _ChaseDriver.task_isDeposit(self)
-    def setDeposit(self, *args): return _ChaseDriver.task_setDeposit(self, *args)
-    def isWithdraw(self): return _ChaseDriver.task_isWithdraw(self)
-    def setWithdraw(self, *args): return _ChaseDriver.task_setWithdraw(self, *args)
-    def setAmount(self, *args): return _ChaseDriver.task_setAmount(self, *args)
-    def getAmount(self): return _ChaseDriver.task_getAmount(self)
-    __swig_destroy__ = _ChaseDriver.delete_task
-    __del__ = lambda self : None;
-task_swigregister = _ChaseDriver.task_swigregister
-task_swigregister(task)
-
-class teller(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, teller, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, teller, name)
-    __repr__ = _swig_repr
-    def __init__(self): 
-        this = _ChaseDriver.new_teller()
-        try: self.this.append(this)
-        except: self.this = this
-    def setTellerID(self, *args): return _ChaseDriver.teller_setTellerID(self, *args)
-    def getTellerID(self): return _ChaseDriver.teller_getTellerID(self)
-    def isAvailable(self): return _ChaseDriver.teller_isAvailable(self)
-    def serveCustomer(self, *args): return _ChaseDriver.teller_serveCustomer(self, *args)
-    def isOnline(self): return _ChaseDriver.teller_isOnline(self)
-    def setStatus(self, *args): return _ChaseDriver.teller_setStatus(self, *args)
-    def setAvailable(self, *args): return _ChaseDriver.teller_setAvailable(self, *args)
-    def custServed(self): return _ChaseDriver.teller_custServed(self)
-    def getCustomerServed(self): return _ChaseDriver.teller_getCustomerServed(self)
-    __swig_destroy__ = _ChaseDriver.delete_teller
-    __del__ = lambda self : None;
-teller_swigregister = _ChaseDriver.teller_swigregister
-teller_swigregister(teller)
-
 
 def main():
   return _ChaseDriver.main()
 main = _ChaseDriver.main
+
+def run():
+  return _ChaseDriver.run()
+run = _ChaseDriver.run
 
 def serveCustomer(*args):
   return _ChaseDriver.serveCustomer(*args)

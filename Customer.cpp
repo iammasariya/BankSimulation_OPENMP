@@ -4,7 +4,6 @@ Disc: Customer Class base
 */
 
 #include "Customer.h"
-#include <time.h>
 
 customer::customer()
 {
