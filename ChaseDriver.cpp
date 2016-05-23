@@ -14,8 +14,8 @@ Author : Team Nirvana - Pranav and Chirag
 #include <boost/format.hpp>
 #include <boost/timer.hpp>
 #include <boost/foreach.hpp>
-#include "Customer.h"
 #include "task.h"
+#include "Customer.h"
 #include "teller.h"
 #include "CustomerQueue.h"
 #include <thread>
@@ -31,7 +31,7 @@ int ledgerDep = 0;
 int ledgerWit = 0;
 int totalLedger = 10000;
 
-void serveCustomer(customer &cust, teller &tel);
+void serveCustomer(customer* cust, teller* tel);
 
 int main()
 {
@@ -108,7 +108,7 @@ int main()
                         custNow = bankLineQueue.Dequeue();
                         double elapsed = waitTime.elapsed();
                         custNow.setWaitingTime(elapsed);
-                        serveCustomer(custNow,curTel);
+                        serveCustomer(&custNow,&curTel);
                         vecCust.push_back(custNow);
                 }
         }
@@ -116,56 +116,56 @@ int main()
     std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;
 }
 
-void serveCustomer(customer &cust, teller &tel)
+void serveCustomer(customer* cust, teller* tel)
 {
     double time;
-    tel.setAvailable(false);
+    tel->setAvailable(false);
     timer1.restart();
-    if(cust.t.isCheck())
+    if(cust->t.isCheck())
     {
         usleep(5000);
         time = timer1.elapsed();
-        cust.setTransactionTime(time);
-        printf("Customer %d has been served by teller %d for check processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        cust->setTransactionTime(time);
+        printf("Customer %d has been served by teller %d for check processing \n",cust->getCustomerNumber(),tel->getTellerID());
 
     }
-    if(cust.t.isInquiry())
+    if(cust->t.isInquiry())
     {
         usleep(1000);
         time = timer1.elapsed();
-        cust.setTransactionTime(time);
-        printf("Customer %d has been served by teller %d for inquiry processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        cust->setTransactionTime(time);
+        printf("Customer %d has been served by teller %d for inquiry processing \n",cust->getCustomerNumber(),tel->getTellerID());
 
     }
-    if(cust.t.isDeposit())
+    if(cust->t.isDeposit())
     {
         usleep(6000);
         time = timer1.elapsed();
-        cust.setTransactionTime(time);
-        printf("Customer %d has been served by teller %d for deposit processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        cust->setTransactionTime(time);
+        printf("Customer %d has been served by teller %d for deposit processing \n",cust->getCustomerNumber(),tel->getTellerID());
 
     }
-    if(cust.t.isWithdraw())
+    if(cust->t.isWithdraw())
     {
         usleep(3000);
         time = timer1.elapsed();
-        cust.setTransactionTime(time);
-        printf("Customer %d has been served by teller %d for withdraw processing \n",cust.getCustomerNumber(),tel.getTellerID());
+        cust->setTransactionTime(time);
+        printf("Customer %d has been served by teller %d for withdraw processing \n",cust->getCustomerNumber(),tel->getTellerID());
 
     }
-    tel.custServed();
-    tel.setAvailable(true);
+    tel->custServed();
+    tel->setAvailable(true);
     #pragma omp critical
     {
-        if(cust.t.isDeposit())
+        if(cust->t.isDeposit())
         {
-            ledgerDep+=cust.t.getAmount();
-            totalLedger+=cust.t.getAmount();
+            ledgerDep+=cust->t.getAmount();
+            totalLedger+=cust->t.getAmount();
         }
-        if(cust.t.isWithdraw())
+        if(cust->t.isWithdraw())
         {
-            ledgerWit+=cust.t.getAmount();
-            totalLedger-=cust.t.getAmount();
+            ledgerWit+=cust->t.getAmount();
+            totalLedger-=cust->t.getAmount();
         }
     }
 }
