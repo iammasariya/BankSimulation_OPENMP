@@ -22,10 +22,14 @@ public:
     void setStatus(bool status);
     void setAvailable(bool avail);
 
+    void custServed();
+    int getCustomerServed();
+
 private:
     bool available;
     bool status;
     int tellerID;
+    int customerServed;
     customer c;
 };
 

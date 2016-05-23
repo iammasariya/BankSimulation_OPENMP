@@ -20,38 +20,38 @@ Author : Team Nirvana - Pranav and Chirag
 #include "CustomerQueue.h"
 #include <thread>
 
-#define NUM_THREADS 5
+#define NUM_THREADS 3
 
 using namespace std;
 
-//boost timer;
 boost::timer waitTime;
 boost::timer timer1;
 
-double proccessCustomer(int selection);
+int ledgerDep = 0;
+int ledgerWit = 0;
+int totalLedger = 10000;
+
 void serveCustomer(customer &cust, teller &tel);
 
 int main()
 {
-    int nthreads;
     omp_set_num_threads(NUM_THREADS);
-
-    //thread first(customerPop);
-    //thread second(processCust);
 
     BankQueue<customer> bankLineQueue;
     vector<customer> vecCust;
     teller telArray[NUM_THREADS];
 
-    for(int i=0;i<5;i++){
+    for(int i=0;i<omp_get_max_threads();i++){
         teller tel;
         tel.setAvailable(true);
         tel.setStatus(true);
         tel.setTellerID(i);
         telArray[i] = tel;
     }
-	std::ifstream  data("customer.csv");
 
+    /* Reading from the CSV file*/
+	std::ifstream  data("customer.csv");
+    int custNum = 1;
 	std::string line;
     while(std::getline(data,line))
 	{
@@ -59,6 +59,8 @@ int main()
 		std::string        cell;
 		customer simCustomer;
         waitTime.restart();
+        simCustomer.setCustomerNumber(custNum);
+        custNum++;
         simCustomer.setArrivalTime(0.0f);
     while(std::getline(lineStream,cell,','))
     {
@@ -66,7 +68,7 @@ int main()
 		std::istringstream iss(cell);
 		if (!(iss >> number).fail())
         {
-		  	simCustomer.setCustomerNumber(number);
+		  	simCustomer.t.setAmount(number);
         }
         else
         {
@@ -90,9 +92,10 @@ int main()
 
     }
         bankLineQueue.Enqueue(simCustomer);
-        std::cout<<"custNum: "<<simCustomer.getCustomerNumber()<<" "<< cell<<endl;
+        std::cout<<"custNum: "<<simCustomer.getCustomerNumber()<<" "<<simCustomer.t.getAmount()<<" "<< cell<<endl;
     }
 
+    /*Parallel block*/
     #pragma omp parallel
     {   customer custNow;
         int id = omp_get_thread_num();
@@ -105,13 +108,12 @@ int main()
                         custNow = bankLineQueue.Dequeue();
                         double elapsed = waitTime.elapsed();
                         custNow.setWaitingTime(elapsed);
-                        //printf("teller %d served customer %d\n",curTel.getTellerID(),custNow.getCustomerNumber());
-                        //proccessCustomer(curTel.getTellerID());
                         serveCustomer(custNow,curTel);
                         vecCust.push_back(custNow);
                 }
         }
     }
+    std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;
 }
 
 void serveCustomer(customer &cust, teller &tel)
@@ -151,39 +153,19 @@ void serveCustomer(customer &cust, teller &tel)
         printf("Customer %d has been served by teller %d for withdraw processing \n",cust.getCustomerNumber(),tel.getTellerID());
 
     }
+    tel.custServed();
     tel.setAvailable(true);
-}
-
-double proccessCustomer(int selection)
-{
-	double time = 0;
-	timer1.restart();
-	switch(selection)
-	{
-		case 0:
-			usleep(500000);
-			cout << "selection 1" << endl;
-			break;
-		case 1:
-			usleep(600000);
-			cout << "selection 2" << endl;
-			break;
-		case 2:
-			usleep(800000);
-			cout << "selection 3" << endl;
-			break;
-		case 3:
-			usleep(400000);
-			cout << "selection 4" << endl;
-			break;
-		case 4:
-			usleep(300000);
-			cout << "selection 5" << endl;
-			break;
-		default:
-			cout << "invalid value"<<endl;
-			break;
-	}
-	time = timer1.elapsed();
-	return time;
+    #pragma omp critical
+    {
+        if(cust.t.isDeposit())
+        {
+            ledgerDep+=cust.t.getAmount();
+            totalLedger+=cust.t.getAmount();
+        }
+        if(cust.t.isWithdraw())
+        {
+            ledgerWit+=cust.t.getAmount();
+            totalLedger-=cust.t.getAmount();
+        }
+    }
 }

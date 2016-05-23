@@ -8,7 +8,6 @@ task::task()
     deposit = false;
     withdraw = false;
     amount = 0.0f;
-    processingTime = 0.0f;
 }
 
     bool task::isCheck(){
@@ -40,14 +39,6 @@ task::task()
     }
     void task::setWithdraw(bool flag){
         withdraw = flag;
-    }
-
-    void task::setProcessingTime(double time){
-        processingTime = time;
-    }
-
-    double task::getProcessingTime(){
-        return processingTime;
     }
 
     void task::setAmount(double amt){

@@ -7,6 +7,7 @@ teller::teller()
     available = false;
     status = false;
     tellerID = 0;
+    customerServed = 0;
     c;
 }
 
@@ -38,4 +39,14 @@ teller::teller()
 
     void teller::setAvailable(bool avail){
         available = avail;
+    }
+
+    void teller::custServed()
+    {
+        this->customerServed++;
+    }
+
+    int teller::getCustomerServed()
+    {
+        return customerServed;
     }

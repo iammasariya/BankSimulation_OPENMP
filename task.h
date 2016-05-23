@@ -19,9 +19,6 @@ public:
     bool isWithdraw();
     void setWithdraw(bool flag);
 
-    void setProcessingTime(double time);
-    double getProcessingTime();
-
     void setAmount(double amt);
     double getAmount();
 
@@ -31,7 +28,6 @@ private:
     bool deposit;
     bool withdraw;
     double amount;
-    double processingTime;
 };
 
 
