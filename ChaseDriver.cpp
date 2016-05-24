@@ -32,6 +32,7 @@ int totalLedger = 10000;
 
 void serveCustomer(customer* cust, teller* tel);
 void run();
+string getdata();
 
 int main()
 {
@@ -114,6 +115,9 @@ omp_set_num_threads(NUM_THREADS);
         }
     }
     std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;    
+
+    cout<<getdata()<<endl;    
+
 }
 
 void run(){
@@ -250,4 +254,22 @@ void serveCustomer(customer* cust, teller* tel)
             totalLedger-=cust->t.getAmount();
         }
     }
+}
+
+string getdata(){
+
+  string finalResult;
+  
+  string deposit = to_string(ledgerDep);
+  string withdraw = to_string(ledgerWit);
+  string total = to_string(totalLedger);
+
+  finalResult.append(deposit);
+  finalResult.append("  ");
+  finalResult.append(withdraw);
+  finalResult.append("  ");
+  finalResult.append(total);
+
+  return finalResult;
+
 }

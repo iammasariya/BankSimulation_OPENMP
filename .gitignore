@@ -5,3 +5,11 @@
 *.pyc
 
 *.cxx
+
+main
+
+*.cpp~
+
+*.i~
+
+*.py~
