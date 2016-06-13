@@ -32,11 +32,10 @@ int totalLedger = 10000;
 
 void serveCustomer(customer* cust, teller* tel);
 void run();
-string getdata();
 
 int main()
 {
-omp_set_num_threads(NUM_THREADS);
+//omp_set_num_threads(NUM_THREADS);
 
     BankQueue<customer> bankLineQueue;
     vector<customer> vecCust;
@@ -97,10 +96,11 @@ omp_set_num_threads(NUM_THREADS);
     }
 
     /*Parallel block*/
-    #pragma omp parallel
-    {   customer custNow;
+//    #pragma omp parallel
+//    {   
+	customer custNow;
         int id = omp_get_thread_num();
-        #pragma omp for
+//        #pragma omp for
         for(int i=id;i<omp_get_max_threads();i++)
         {
                 teller curTel = telArray[id];
@@ -113,15 +113,12 @@ omp_set_num_threads(NUM_THREADS);
                         vecCust.push_back(custNow);
                 }
         }
-    }
+//    }
     std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;    
-
-    cout<<getdata()<<endl;    
-
 }
 
 void run(){
-    omp_set_num_threads(NUM_THREADS);
+//omp_set_num_threads(NUM_THREADS);
 
     BankQueue<customer> bankLineQueue;
     vector<customer> vecCust;
@@ -182,10 +179,11 @@ void run(){
     }
 
     /*Parallel block*/
-    #pragma omp parallel
-    {   customer custNow;
+//    #pragma omp parallel
+//    {   
+	customer custNow;
         int id = omp_get_thread_num();
-        #pragma omp for
+//        #pragma omp for
         for(int i=id;i<omp_get_max_threads();i++)
         {
                 teller curTel = telArray[id];
@@ -198,8 +196,8 @@ void run(){
                         vecCust.push_back(custNow);
                 }
         }
-    }
-    std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;   
+//    }
+    std::cout<<ledgerDep<<" "<<ledgerWit<<" "<<totalLedger<<endl;    
 }
 
 void serveCustomer(customer* cust, teller* tel)
@@ -241,8 +239,8 @@ void serveCustomer(customer* cust, teller* tel)
     }
     tel->custServed();
     tel->setAvailable(true);
-    #pragma omp critical
-    {
+//    #pragma omp critical
+//    {
         if(cust->t.isDeposit())
         {
             ledgerDep+=cust->t.getAmount();
@@ -253,23 +251,5 @@ void serveCustomer(customer* cust, teller* tel)
             ledgerWit+=cust->t.getAmount();
             totalLedger-=cust->t.getAmount();
         }
-    }
-}
-
-string getdata(){
-
-  string finalResult;
-  
-  string deposit = to_string(ledgerDep);
-  string withdraw = to_string(ledgerWit);
-  string total = to_string(totalLedger);
-
-  finalResult.append(deposit);
-  finalResult.append("  ");
-  finalResult.append(withdraw);
-  finalResult.append("  ");
-  finalResult.append(total);
-
-  return finalResult;
-
+//    }
 }

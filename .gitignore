@@ -1,0 +1,15 @@
+*.h.gch
+
+*.o
+
+*.pyc
+
+*.cxx
+
+main
+
+*.cpp~
+
+*.i~
+
+*.py~

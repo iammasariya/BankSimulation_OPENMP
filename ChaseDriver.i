@@ -34,12 +34,14 @@ extern void serveCustomer(customer* cust, teller* tel);
 %}
 
 #define NUM_THREADS 3
-#include "teller.h"
-#include "Customer.h"
-#include "CustomerQueue.h"
+%include <std_string.i>
+%include "teller.h"
+%include "Customer.h"
+%include "CustomerQueue.h"
 extern int ledgerDep;
 extern int ledgerWit;
 extern int totalLedger;
 extern int main();
 extern void run();
 extern void serveCustomer(customer* cust, teller* tel);
+
